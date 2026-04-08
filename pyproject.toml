@@ -1,0 +1,20 @@
+[project]
+name = "screener-mcp-server"
+version = "0.1.0"
+description = "MCP server for Indian stock market data via Screener Unofficial API"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]>=1.0.0",
+    "httpx>=0.28.0",
+    "python-dotenv>=1.0",
+]
+
+[project.scripts]
+screener-mcp = "screener_mcp.server:main"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
