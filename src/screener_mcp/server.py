@@ -256,7 +256,27 @@ async def compare_stocks(symbols: str) -> str:
 # ═══════════════════════════════════════════════════════════════════
 
 def main():
-    mcp.run()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Screener MCP Server")
+    parser.add_argument(
+        "--transport",
+        choices=["stdio", "sse"],
+        default="stdio",
+        help="Transport type: stdio (default, for Claude Code) or sse (for Claude.ai)",
+    )
+    parser.add_argument(
+        "--host", default="0.0.0.0", help="Host to bind SSE server (default: 0.0.0.0)"
+    )
+    parser.add_argument(
+        "--port", type=int, default=8000, help="Port for SSE server (default: 8000)"
+    )
+    args = parser.parse_args()
+
+    if args.transport == "sse":
+        mcp.run(transport="sse", host=args.host, port=args.port)
+    else:
+        mcp.run()
 
 
 if __name__ == "__main__":
