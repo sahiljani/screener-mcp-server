@@ -48,6 +48,9 @@ class ScreenerAPIClient:
     async def get_company(self, symbol: str, mode: str = "consolidated") -> dict[str, Any]:
         return await self._get(f"/v1/company/{symbol}", {"mode": mode})
 
+    async def get_company_raw(self, symbol: str, mode: str = "consolidated") -> dict[str, Any]:
+        return await self._get(f"/v1/company/{symbol}/raw", {"mode": mode})
+
     async def get_company_tab(self, symbol: str, tab: str, mode: str = "consolidated") -> dict[str, Any]:
         return await self._get(f"/v1/company/{symbol}/{tab}", {"mode": mode})
 

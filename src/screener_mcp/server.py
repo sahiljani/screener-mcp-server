@@ -9,7 +9,26 @@ from mcp.server.fastmcp import FastMCP
 
 from screener_mcp.client import ScreenerAPIClient
 
-mcp = FastMCP("screener-mcp")
+mcp = FastMCP(
+    "screener-mcp",
+    host="0.0.0.0",
+    port=8098,
+    transport_security={
+        "enable_dns_rebinding_protection": True,
+        "allowed_hosts": [
+            "screener.janisahil.com",
+            "screener.janisahil.com:*",
+            "127.0.0.1:*",
+            "localhost:*",
+        ],
+        "allowed_origins": [
+            "https://screener.janisahil.com",
+            "https://claude.ai",
+            "http://127.0.0.1:*",
+            "http://localhost:*",
+        ],
+    },
+)
 api = ScreenerAPIClient()
 
 VALID_TABS = [
@@ -48,6 +67,18 @@ async def get_company(symbol: str, mode: str = "consolidated") -> str:
         mode: "consolidated" (default) or "standalone"
     """
     data = await api.get_company(symbol=symbol.strip().upper(), mode=mode)
+    return _fmt(data)
+
+
+@mcp.tool()
+async def get_company_raw(symbol: str, mode: str = "consolidated") -> str:
+    """Get raw HTML and section list for a company page — useful for extracting data not available via structured endpoints.
+
+    Args:
+        symbol: Stock symbol (e.g., TCS, INFY, RELIANCE, HDFCBANK)
+        mode: "consolidated" (default) or "standalone"
+    """
+    data = await api.get_company_raw(symbol=symbol.strip().upper(), mode=mode)
     return _fmt(data)
 
 
